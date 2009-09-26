@@ -29,6 +29,21 @@ public class DomUtil {
 		return "";
 	}
 
+	public static String node2String(Node n) {
+		try {
+			TransformerFactory tfactory = TransformerFactory.newInstance();
+			Transformer transformer = tfactory.newTransformer();
+			StringWriter sw = new StringWriter();
+			transformer.transform(new DOMSource(n), new StreamResult(sw));
+			return sw.toString();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+
+	}
+
 	public static void scanNodes(NodeList nodeList) throws Exception {
 		scanNodes(nodeList, 1);
 	}

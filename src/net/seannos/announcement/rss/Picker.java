@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.seannos.announcement.rss.util.DomUtil;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -109,6 +111,8 @@ public class Picker {
 						addEntryTitleAndLink(entryMap, node, nodeName,
 								attributeName, attributeValue);
 						addCreateDate(entryMap, node, nodeName);
+						addContent(entryMap, node, nodeName, attributeName,
+								attributeValue);
 					}
 				}
 			}
@@ -118,16 +122,27 @@ public class Picker {
 		}
 	}
 
+	private static void addContent(Map<String, Object> entryMap, Node node,
+			String nodeName, String attributeName, String attributeValue) {
+		if ("TD".equals(nodeName)
+				&& "class".equals(attributeName)
+				&& "sites-layout-tile sites-tile-name-content-1"
+						.equals(attributeValue)) {
+			entryMap.put(FeedGenerator.CONTENT_VALUE, DomUtil.node2String(
+					node.getFirstChild()).replaceFirst(
+					"<\\?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"\\?>",
+					""));
+
+		}
+	}
+
 	private static void addEntryTitleAndLink(Map<String, Object> entryMap,
 			Node node, String nodeName, String attributeName,
 			String attributeValue) {
 		if (isTitle(nodeName, attributeName, attributeValue)
-				&& false == entryMap
-						.containsKey(FeedGenerator.ENTRY_TITLE)) {
-			entryMap.put(FeedGenerator.ENTRY_TITLE, node
-					.getTextContent());
-			entryMap.put(FeedGenerator.ENTRY_LINK,
-					attributeValue);
+				&& false == entryMap.containsKey(FeedGenerator.ENTRY_TITLE)) {
+			entryMap.put(FeedGenerator.ENTRY_TITLE, node.getTextContent());
+			entryMap.put(FeedGenerator.ENTRY_LINK, attributeValue);
 		}
 	}
 
@@ -136,17 +151,12 @@ public class Picker {
 		if ("NOSCRIPT".equals(nodeName)) {
 			// System.out.println("[" + node.getTextContent() +
 			// "]");
-			if (node
-					.getTextContent()
-					.matches(
-							".*?\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}.*?")) {
+			if (node.getTextContent().matches(
+					".*?\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}.*?")) {
 				String value = replaceUnicodeFormatControlCharacters(node
-										.getTextContent());
-				System.out.println("[["+value+"]]");
-				entryMap
-						.put(
-								FeedGenerator.ENTRY_DATETIME,
-								value);
+						.getTextContent());
+				System.out.println("[[" + value + "]]");
+				entryMap.put(FeedGenerator.ENTRY_DATETIME, value);
 			}
 		}
 	}

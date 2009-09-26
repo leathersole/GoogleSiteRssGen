@@ -30,7 +30,7 @@ public class FeedGenerator {
 	public static final String ENTRY_TITLE = "title";
 	public static final String ENTRY_LINK = "link";
 	public static final String ENTRY_DATETIME = "datetime";
-	private static final Object CONTENT_VALUE = "value";
+	public static final String CONTENT_VALUE = "value";
 	private final String description;
 
 	public FeedGenerator(String url, Document dom, String feedType,
@@ -58,12 +58,13 @@ public class FeedGenerator {
 	public void createEntries(SyndFeed feed) throws ParseException {
 		List<Node> announcements = picker.getAnnouncements();
 		ArrayList<SyndEntry> entries = new ArrayList<SyndEntry>();
-		ArrayList<SyndContent> contents = new ArrayList<SyndContent>();
 		SyndEntry entry = null;
 		SyndContent content = null;
+		ArrayList<SyndContent> contents = null;
 		for (Node node : announcements) {
 			Map<String, Object> entryMap = picker.getEntryMap(node);
 			entry = new SyndEntryImpl();
+			contents = new ArrayList<SyndContent>();
 
 			content = new SyndContentImpl();
 
@@ -78,7 +79,7 @@ public class FeedGenerator {
 			}
 
 			content.setType("text/html");
-			content.setValue((String)entryMap.get(CONTENT_VALUE));
+			content.setValue((String) entryMap.get(CONTENT_VALUE));
 
 			contents.add(content);
 			entry.setContents(contents);
