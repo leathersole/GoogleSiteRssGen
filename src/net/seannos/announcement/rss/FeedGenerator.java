@@ -102,6 +102,7 @@ public class FeedGenerator {
 		feed.setTitle(picker.getTitle());
 		feed.setLink(url);
 		feed.setDescription(description);
+		feed.setEncoding("utf-8");
 		return feed;
 	}
 

@@ -15,7 +15,7 @@ public class Fetcher {
 			URL url;
 			url = new URL(urlString);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+					url.openStream(),"utf8"));
 			String line;
 			StringBuffer fetchedPage = new StringBuffer();
 

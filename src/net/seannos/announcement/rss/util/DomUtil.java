@@ -23,7 +23,6 @@ public class DomUtil {
 			transformer.transform(new DOMSource(d), new StreamResult(sw));
 			return sw.toString();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";

@@ -110,7 +110,8 @@ public class Picker {
 						String attributeValue = nodeMap.item(j).getNodeValue();
 						addEntryTitleAndLink(entryMap, node, nodeName,
 								attributeName, attributeValue);
-						addCreateDate(entryMap, node, nodeName);
+						addCreateDate(entryMap, node, nodeName, attributeName,
+								attributeValue);
 						addContent(entryMap, node, nodeName, attributeName,
 								attributeValue);
 					}
@@ -147,15 +148,15 @@ public class Picker {
 	}
 
 	private static void addCreateDate(Map<String, Object> entryMap, Node node,
-			String nodeName) {
-		if ("NOSCRIPT".equals(nodeName)) {
-			// System.out.println("[" + node.getTextContent() +
-			// "]");
+			String nodeName, String attributeName, String attributeValue) {
+		if ("SPAN".equals(nodeName) && "xmlns".equals(attributeName)) {
+			System.out.println("[" + node.getTextContent() + "]");
 			if (node.getTextContent().matches(
-					".*?\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}.*?")) {
+					".*?\\d{4}/\\d{2}/\\d{2}\\s\\d{1,2}:\\d{2}.*?")
+					) {
 				String value = replaceUnicodeFormatControlCharacters(node
 						.getTextContent());
-				System.out.println("[[" + value + "]]");
+				// System.out.println("[[" + value + "]]");
 				entryMap.put(FeedGenerator.ENTRY_DATETIME, value);
 			}
 		}
