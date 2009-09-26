@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ public class FeedGenerator {
 	public static final String ENTRY_TITLE = "title";
 	public static final String ENTRY_LINK = "link";
 	public static final String ENTRY_DATETIME = "datetime";
+	private static final Object CONTENT_VALUE = "value";
 	private final String description;
 
 	public FeedGenerator(String url, Document dom, String feedType,
@@ -43,7 +45,8 @@ public class FeedGenerator {
 		this(url, dom, "rss_2.0", description);
 	}
 
-	public void generate(Writer writer) throws IOException, FeedException, ParseException {
+	public void generate(Writer writer) throws IOException, FeedException,
+			ParseException {
 		SyndFeed feed = createFeed();
 
 		createEntries(feed);
@@ -63,19 +66,33 @@ public class FeedGenerator {
 			entry = new SyndEntryImpl();
 
 			content = new SyndContentImpl();
-			contents.add(content);
 
 			entry.setTitle((String) entryMap.get(ENTRY_TITLE));
-			entry.setLink((String) entryMap.get(ENTRY_LINK));
+			entry.setLink(modifyLink((String) entryMap.get(ENTRY_LINK)));
 			DateFormat dfm = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-			entry.setPublishedDate(dfm.parse((String)entryMap.get(ENTRY_DATETIME)));
+			String string = (String) entryMap.get(ENTRY_DATETIME);
+			// System.out.println(string);
+			if (string != null) {
+				Date parse = dfm.parse(string);
+				entry.setPublishedDate(parse);
+			}
 
+			content.setType("text/html");
+			content.setValue((String)entryMap.get(CONTENT_VALUE));
+
+			contents.add(content);
 			entry.setContents(contents);
 
 			entries.add(entry);
 		}
 		feed.setEntries(entries);
 
+	}
+
+	private String modifyLink(String string) {
+		int indexOf = url.indexOf("://");
+		int indexOf2 = url.indexOf("/", indexOf + 3);
+		return url.substring(0, indexOf2) + string;
 	}
 
 	private SyndFeed createFeed() {

@@ -14,6 +14,7 @@ public class Picker {
 
 	private final Document dom;
 	private List<Node> announcements = new ArrayList<Node>();
+	public static final char LEFT_TO_RIGHT_MARK = 0x200e;
 
 	public Picker(Document dom) {
 		this.dom = dom;
@@ -105,22 +106,9 @@ public class Picker {
 					for (int j = 0; j < nodeMap.getLength(); j++) {
 						String attributeName = nodeMap.item(j).getNodeName();
 						String attributeValue = nodeMap.item(j).getNodeValue();
-						if (isTitle(nodeName, attributeName, attributeValue)
-								&& false == entryMap
-										.containsKey(FeedGenerator.ENTRY_TITLE)) {
-							entryMap.put(FeedGenerator.ENTRY_TITLE, node
-									.getTextContent());
-							entryMap.put(FeedGenerator.ENTRY_LINK,
-									attributeValue);
-						}
-						if ("NOSCRIPT".equals(nodeName)) {
-							System.out.println("[" + node.getTextContent() + "]");
-							if (node.getTextContent().matches(
-									".*?\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}.*?")) {
-								entryMap.put(FeedGenerator.ENTRY_DATETIME, node
-										.getTextContent());
-							}
-						}
+						addEntryTitleAndLink(entryMap, node, nodeName,
+								attributeName, attributeValue);
+						addCreateDate(entryMap, node, nodeName);
 					}
 				}
 			}
@@ -128,6 +116,44 @@ public class Picker {
 				pickEntryElements(node.getChildNodes(), entryMap);
 			}
 		}
+	}
+
+	private static void addEntryTitleAndLink(Map<String, Object> entryMap,
+			Node node, String nodeName, String attributeName,
+			String attributeValue) {
+		if (isTitle(nodeName, attributeName, attributeValue)
+				&& false == entryMap
+						.containsKey(FeedGenerator.ENTRY_TITLE)) {
+			entryMap.put(FeedGenerator.ENTRY_TITLE, node
+					.getTextContent());
+			entryMap.put(FeedGenerator.ENTRY_LINK,
+					attributeValue);
+		}
+	}
+
+	private static void addCreateDate(Map<String, Object> entryMap, Node node,
+			String nodeName) {
+		if ("NOSCRIPT".equals(nodeName)) {
+			// System.out.println("[" + node.getTextContent() +
+			// "]");
+			if (node
+					.getTextContent()
+					.matches(
+							".*?\\d{4}/\\d{2}/\\d{2}\\s\\d{2}:\\d{2}.*?")) {
+				String value = replaceUnicodeFormatControlCharacters(node
+										.getTextContent());
+				System.out.println("[["+value+"]]");
+				entryMap
+						.put(
+								FeedGenerator.ENTRY_DATETIME,
+								value);
+			}
+		}
+	}
+
+	private static String replaceUnicodeFormatControlCharacters(
+			String textContent) {
+		return textContent.replaceAll(String.valueOf(LEFT_TO_RIGHT_MARK), "");
 	}
 
 	private static boolean isTitle(String nodeName, String attributeName,
