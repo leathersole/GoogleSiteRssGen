@@ -10,4 +10,10 @@ public class FetcherTest extends TestCase {
 		assertNotNull(s);
 		System.out.println(s); 
 	}
+	public void testFetch_fetch_time_measurement(){
+		Fetcher f = new Fetcher();
+		String s = f.fetch("http://www.sean-nos.net/Home/announcement");
+		assertNotNull(s);
+		System.out.println(s); 
+	}
 }

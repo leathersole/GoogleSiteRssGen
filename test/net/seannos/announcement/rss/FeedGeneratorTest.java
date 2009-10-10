@@ -30,7 +30,6 @@ public class FeedGeneratorTest extends TestCase {
 		Date date = dfm.parse("2009/01/01 23:55");
 		dfm = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.JAPAN);
 		dfm.parse("2009/09/23 18:23");
-
 	}
 
 	public void test_modifyLink() {
