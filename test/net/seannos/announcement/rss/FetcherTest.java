@@ -8,6 +8,6 @@ public class FetcherTest extends TestCase {
 		Fetcher f = new Fetcher();
 		String s = f.fetch("http://www.google.com/");
 		assertNotNull(s);
-		System.out.println(s);
+		System.out.println(s); 
 	}
 }

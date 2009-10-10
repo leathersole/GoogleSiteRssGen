@@ -12,6 +12,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Picker picks elements that FeedGenerator needs from Dom.
+ * @author KONISHI Takayuki
+ *
+ */
 public class Picker {
 
 	private final Document dom;

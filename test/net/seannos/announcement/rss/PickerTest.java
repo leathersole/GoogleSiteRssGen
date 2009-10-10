@@ -30,11 +30,11 @@ public class PickerTest extends TestCase {
 		Node n=p.getAnnouncements().get(0);
 		DomUtil.scanNode(n);
 		Map<String, Object> entryMap = p.getEntryMap(n);
-		assertEquals("10月の予定を追加", entryMap.get(FeedGenerator.ENTRY_TITLE));
-		assertEquals("/Home/announcement/10tsukinoyoteiwotsuika", entryMap.get(FeedGenerator.ENTRY_LINK));
-		assertEquals("<DIV dir=\"ltr\" xmlns=\"http://www.w3.org/1999/xhtml\">10月の練習会の予定を追加しました。<DIV>9月に引き続き、12:00〜12:30を未経験あるいは初心者のための時間としています。</DIV><DIV>初めての方はぜひこの時間からおいで下さい。</DIV></DIV>", entryMap.get(FeedGenerator.CONTENT_VALUE));
+		assertEquals("RSSを変更しました", entryMap.get(FeedGenerator.ENTRY_TITLE));
+		assertEquals("/Home/announcement/rsswohenkoushimashita", entryMap.get(FeedGenerator.ENTRY_LINK));
+		assertEquals("<DIV dir=\"ltr\" xmlns=\"http://www.w3.org/1999/xhtml\">RSSはいままでYahoo pipesを使用していましたが、うまく動かなくなっているようなので、変更しました。<DIV>以降、<A href=\"feed://seannos-rss.appspot.com/seannos_rss\">feed://seannos-rss.appspot.com/seannos_rss</A> をご利用ください。</DIV><DIV>よろしくお願いします。</DIV></DIV>", entryMap.get(FeedGenerator.CONTENT_VALUE));
 		
-		assertEquals("‎2009/09/23 18:23".replaceAll(String.valueOf(Picker.LEFT_TO_RIGHT_MARK), ""), entryMap.get(FeedGenerator.ENTRY_DATETIME));
+		assertEquals("‎2009/09/26 8:24".replaceAll(String.valueOf(Picker.LEFT_TO_RIGHT_MARK), ""), entryMap.get(FeedGenerator.ENTRY_DATETIME));
 	}
 	public void test_regex(){
 		assertTrue("2009‎".matches("2009.*"));
